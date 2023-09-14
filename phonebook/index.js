@@ -29,4 +29,12 @@ app.get('/api/persons', (req, res) => {
     res.json(numbers)
 })
 
+app.get('/api/info', (req, res) => {
+    res.send(
+        `<p>There are ${numbers.length} in the phonebook</p>
+        <p>${new Date()}</p>
+        `
+    )
+})
+
 app.listen(PORT, () => console.log(`running on port ${PORT}`))
