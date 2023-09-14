@@ -25,6 +25,16 @@ let numbers = [
     }
 ]
 
+const generateId = () => {
+    const maxId = numbers.length > 0
+        ? Math.max(...numbers.map(n => n.id))
+        : 0
+
+    return maxId + 1
+}
+
+app.use(express.json())
+
 app.get('/api/persons', (req, res) => {
     res.json(numbers)
 })
@@ -35,6 +45,32 @@ app.get('/api/persons/:id', (req, res) => {
 
     if (!number) return res.status(404).end()
     res.json(number)
+})
+
+app.post('/api/persons', (req, res) => {
+    const { name, number } = req.body
+    console.log(name,number)
+    if (!name || !number) {
+        return res.json({
+            error: `missing ${name ? '' : '|name'} ${number ? '' : '|number'}`
+        })
+    }
+
+    if (numbers.find(n => n.name.toLowerCase() === name.toLowerCase())) {
+        return res.json({
+            error: `${name} already exists`
+        })
+    }
+
+    const newNumber = {
+        name,
+        number,
+        id: generateId()
+    }
+
+    numbers.push(newNumber)
+
+    res.status(201).json(newNumber)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
