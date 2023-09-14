@@ -29,6 +29,14 @@ app.get('/api/persons', (req, res) => {
     res.json(numbers)
 })
 
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const number = numbers.find(n => n.id === id)
+
+    if (!number) return res.status(404).end()
+    res.json(number)
+})
+
 app.get('/api/info', (req, res) => {
     res.send(
         `<p>There are ${numbers.length} in the phonebook</p>
