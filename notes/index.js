@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 
 let notes = [
     {
@@ -27,6 +28,7 @@ const generateId = () => {
   return id + 1
 }
 
+app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res ) => res.send('<h1>lol</h1>'))
