@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+
 const PORT = 3001
 
 let numbers = [
@@ -34,6 +36,9 @@ const generateId = () => {
 }
 
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :raw'))
+
+morgan.token('raw', (req, res) => JSON.stringify(req.body))
 
 app.get('/api/persons', (req, res) => {
     res.json(numbers)
@@ -49,7 +54,7 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const { name, number } = req.body
-    console.log(name,number)
+    console.log(req)
     if (!name || !number) {
         return res.json({
             error: `missing ${name ? '' : '|name'} ${number ? '' : '|number'}`
